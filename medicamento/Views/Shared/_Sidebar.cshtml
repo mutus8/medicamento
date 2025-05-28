@@ -1,0 +1,90 @@
+﻿
+<div id="layoutSidenav_nav">
+	<nav class="sb-sidenav accordion sb-sidenav-dark d-flex" id="sidenavAccordion">
+		<div class="sb-sidenav-menu">
+			<div class="nav">
+				<a class="nav-link" asp-controller="Home" asp-action="Index">
+					<div class="sb-nav-link-icon">
+						<i class="bi bi-speedometer"></i>
+						</div>
+					Dashboard
+				</a>
+				<a class="nav-link" asp-controller="Medicine" asp-action="Index">
+					<div class="sb-nav-link-icon">
+						<i class="bi bi-prescription2"></i>
+					</div>
+					Medicine
+				</a>
+				
+				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+				   data-bs-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+					<div class="sb-nav-link-icon"><i class="bi bi-columns"></i></div>
+					Order
+					<div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+				</a>
+
+				<div class="collapse" id="collapseOrder" aria-labelledby="headingOne"
+					 data-bs-parent="#sidenavAccordion">
+					<nav class="sb-sidenav-menu-nested nav">
+						<a class="nav-link" href="#" >Order List</a>
+						<a class="nav-link" href="#" >Order Details</a>
+					</nav>
+				</div>
+
+				<a class="nav-link" href="charts.html">
+					<div class="sb-nav-link-icon"><i class="bi bi-cart3"></i></div>
+					Shopping Cart
+				</a>
+
+				<div class="sb-sidenav-menu-heading">Management</div>
+				
+				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+				   data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+					<div class="sb-nav-link-icon"><i class="bi bi-person-gear"></i></div>
+					User
+					<div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+				</a>
+
+				<div class="collapse" id="collapseUser" aria-labelledby="headingFour"
+					 data-bs-parent="#sidenavAccordion">
+					<nav class="sb-sidenav-menu-nested nav">
+						<a class="nav-link" href="#">Create User</a>
+						<a class="nav-link" href="#">User Management</a>
+					</nav>
+				</div>
+				
+				<a class="nav-link" href="tables.html">
+					<div class="sb-nav-link-icon"><i class="bi bi-bar-chart"></i></div>
+					Statics
+				</a>
+
+				
+				
+				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+				   data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+					<div class="sb-nav-link-icon"><i class="bi bi-grid"></i></div>
+					Layout
+					<div class="sb-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+				</a>
+
+				<div class="collapse" id="collapseLayouts" aria-labelledby="headingThree"
+					 data-bs-parent="#sidenavAccordion">
+					<nav class="sb-sidenav-menu-nested nav">
+						<a class="nav-link" href="#" data-bs-theme-value="auto">Default</a>
+						<a class="nav-link" href="#" data-bs-theme-value="light">Light Mode</a>
+						<a class="nav-link" href="#" data-bs-theme-value="dark">Dark Mode</a>
+
+					</nav>
+				</div>
+
+
+
+
+			</div>
+		</div>
+		<div class="sb-sidenav-footer">
+			<div class="small">Logged in as:</div>
+			Start Bootstrap
+		</div>
+	</nav>
+</div>
