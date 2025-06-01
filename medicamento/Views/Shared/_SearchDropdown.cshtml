@@ -1,0 +1,14 @@
+﻿<form class="form-inline mr-auto"
+	  asp-controller="Medicine" asp-action="List" method="get">
+	<div class="input-group input-group">
+		@Html.TextBox("Param", null, new { @class = "form-control form-control-dark text-bg-dark border-0", placeholder = "Search" })
+		@* <div class="input-group-append"> *@
+			@* <button type="submit" id="submit" class="btn btn-primary">
+				<i class="fas fa-search fa-sm"></i>
+			</button> *@
+			@* <div class="input-group-text border-0">
+				<i class="bi bi-search"></i>
+			</div> *@
+		@* </div> *@
+	</div>
+</form>

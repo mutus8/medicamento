@@ -1,0 +1,11 @@
+﻿<form class="d-none d-lg-inline-block form-inline me-md-3 my-md-0 my-2 me-0"
+	  asp-controller="Medicine" asp-action="List" method="get">
+	<div class="input-group input-group-joined">
+		@Html.TextBox("Param", null, new { @class = "form-control border-0", placeholder = "Search" })
+		@* <div class="input-group-append">
+			<div class="input-group-text border-0">
+				<i class="bi bi-search"></i>
+			</div>
+		</div> *@
+	</div>
+</form>
