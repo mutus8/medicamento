@@ -4,25 +4,9 @@
         <i class="bi bi-list"></i>
     </button>
     <a class="navbar-brand ps-3" href="index.html">Mutus</a>
-    <form class="d-none d-lg-inline-block form-inline me-md-3 my-md-0 my-2 me-0">
-        @* <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search"
-                   aria-describedby="btnNavbarSearch" />
-            <button class="btn btn-dark" id="btnNavbarSearch" type="button">
-                <i class="bi bi-search"></i>
-            </button>
-        </div> *@
-        <div class="input-group input-group-joined">
-            <input class="form-control border-0" type="text" placeholder="Search" aria-label="Search"
-                   aria-describedby="btnNavbarSearch" />
-            @* <button class="btn btn-dark" id="btnNavbarSearch" type="button">
-                <i class="bi bi-search"></i>
-            </button> *@
-            <div class="input-group-text border-0">
-                <i class="bi bi-search"></i>
-            </div>
-        </div>
-    </form>
+
+    <partial name="_Search" />
+
     <ul class="navbar-nav me-lg-4 me-3 ms-auto">
 
         <li class="nav-item dropdown d-lg-none">
@@ -31,17 +15,7 @@
                 <i class="bi bi-search"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="searchDropdown" style="width: 200px;">
-                <form class="form-inline mr-auto">
-                    <div class="input-group">
-                        <input type="text" class="form-control small border-0" placeholder="Search"
-                               aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-dark" type="button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <partial name="_SearchDropdown" />
             </div>
         </li>
 

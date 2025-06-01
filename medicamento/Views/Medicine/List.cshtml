@@ -1,0 +1,61 @@
+﻿@model IEnumerable<medicamento.Models.Medicine.PrescripcionModel>
+
+@{
+	ViewData["Title"] = "Medicine management";
+}
+
+<div class="card-header">
+	<i class="bi bi-table me-1"></i>
+	Medicine List
+</div>
+
+<div class="card m-4 shadow">
+	<div class="card-header py-3">
+		<h6 class="font-weight-bold text-primary m-0">Medicine table</h6>
+	</div>
+	<div class="card-body">
+		<div class="table-responsive">
+			<table class="table-bordered table" id="dataTable" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Code</th>
+						<th>Name</th>
+						<th>Laboratory</th>
+						<th>Active Substance</th>
+						<th>Excipients</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								@Html.DisplayFor(modelItem => item.cod_definitivo)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.des_comercial)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.laboratorio)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.principios_activos)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.excipientes)
+							</td>
+							<td class="text-center">
+								<a asp-action="Details" asp-route-id="@item.cod_nacional" class="list-group-item-action px-2">
+									<i class="bi bi-eye"></i>
+								</a>
+							</td>
+						</tr>
+
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
