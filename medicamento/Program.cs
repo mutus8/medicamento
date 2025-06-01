@@ -1,5 +1,6 @@
 using medicamento.Models.Account;
 using medicamento.Services.DB;
+using medicamento.Services.ShoppingCart;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Context' not found."));
     options.EnableSensitiveDataLogging();
 });
+
+builder.Services.AddScoped<ShoppingCart>();
 
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {

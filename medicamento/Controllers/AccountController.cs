@@ -30,7 +30,6 @@ namespace medicamento.Controllers
 
                 if (result.Succeeded)
                 {
-                    //MigrateShoppingCart(model.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -152,13 +151,5 @@ namespace medicamento.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //private void MigrateShoppingCart(string UserName)
-        //{
-        //    // Associate shopping cart items with logged-in user
-        //    var cart = ShoppingCart.GetCart(this.HttpContext);
-
-        //    cart.MigrateCart(UserName);
-        //    HttpContext.Session.SetString(ShoppingCart.CartSessionKey, UserName);
-        //}
     }
 }
