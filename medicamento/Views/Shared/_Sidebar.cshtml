@@ -26,13 +26,15 @@
 				<div class="collapse" id="collapseOrder" aria-labelledby="headingOne"
 					 data-bs-parent="#sidenavAccordion">
 					<nav class="sidenav-menu-nested nav">
-						<a class="nav-link" href="#" >Order List</a>
+						<a class="nav-link" asp-controller="Orders" asp-action="Index">Order List</a>
 						<a class="nav-link" href="#" >Order Details</a>
 					</nav>
 				</div>
 
-				<a class="nav-link" href="charts.html">
-					<div class="nav-link-icon"><i class="bi bi-cart3"></i></div>
+				<a class="nav-link" asp-controller="ShoppingCart" asp-action="Index">
+					<div class="nav-link-icon">
+						<i class="bi bi-cart3"></i>
+						</div>
 					Shopping Cart
 				</a>
 

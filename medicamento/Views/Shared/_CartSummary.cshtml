@@ -1,0 +1,68 @@
+﻿@using medicamento.Services.ShoppingCart
+@using Microsoft.AspNetCore.Mvc;
+@inject ShoppingCart cart;
+
+@{
+	var pathBase = Context;
+	var cart = ShoppingCart.GetCart(pathBase);
+}
+
+
+<!-- Nav Item - Alerts -->
+<li class="nav-item dropdown no-arrow mx-1">
+	<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+	   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<i class="fas fa-shopping-cart fa-fw"></i>
+		<!-- Counter - Alerts -->
+		<span id="cart-status" class="badge badge-danger badge-counter cart-status">@cart.GetCount()</span>
+	</a>
+	<!-- Dropdown - Alerts -->
+	<div class="dropdown-list dropdown-menu dropdown-menu-right animated--grow-in shadow"
+		 aria-labelledby="alertsDropdown">
+		<h6 class="dropdown-header">
+			Alerts Center
+		</h6>
+		@foreach (var item in @cart.GetCartItems())
+		{
+			<div id="item-@item.RecordId">
+
+				<a class="dropdown-item d-flex align-items-center" href="#">
+					<div class="mr-3">
+						<div class="icon-circle bg-primary">
+							<i class="fas fa-file-alt text-white"></i>
+						</div>
+					</div>
+					<div>
+						<div class="small text-gray-500">December 12, 2019</div>
+						<span class="font-weight-bold">@item.Medicine.des_comercial</span>
+					</div>
+				</a>
+			</div>
+
+		}
+		@*         <a class="dropdown-item d-flex align-items-center" href="#">
+            <div class="mr-3">
+                <div class="icon-circle bg-success">
+                    <i class="fas fa-donate text-white"></i>
+                </div>
+            </div>
+            <div>
+                <div class="small text-gray-500">December 7, 2019</div>
+                $290.29 has been deposited into your account!
+            </div>
+        </a>
+        <a class="dropdown-item d-flex align-items-center" href="#">
+            <div class="mr-3">
+                <div class="icon-circle bg-warning">
+                    <i class="fas fa-exclamation-triangle text-white"></i>
+                </div>
+            </div>
+            <div>
+                <div class="small text-gray-500">December 2, 2019</div>
+                Spending Alert: We've noticed unusually high spending for your account.
+            </div>
+        </a> *@
+		<a class="dropdown-item small text-center text-gray-500" asp-controller="ShoppingCart" asp-action="Index">Show All</a>
+
+	</div>
+</li>
