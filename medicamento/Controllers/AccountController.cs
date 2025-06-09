@@ -62,7 +62,8 @@ namespace medicamento.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login", "Account");
+                    await userManager.AddToRoleAsync(users, "User");
+                    return RedirectToAction("Index", "User");
                 }
                 else
                 {
@@ -71,10 +72,10 @@ namespace medicamento.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
 
-                    return View(model);
+                    return View("~/View/User/Index",model);
                 }
             }
-            return View(model);
+            return View("~/View/User/Index", model);
         }
 
         public IActionResult VerifyEmail()
@@ -107,19 +108,123 @@ namespace medicamento.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await userManager.FindByNameAsync(model.Email);
+        //        if (user != null)
+        //        {
+        //            var result = await userManager.RemovePasswordAsync(user);
+        //            if (result.Succeeded)
+        //            {
+        //                result = await userManager.AddPasswordAsync(user, model.NewPassword);
+        //                return RedirectToAction("Login", "Account");
+        //            }
+        //            else
+        //            {
+
+        //                foreach (var error in result.Errors)
+        //                {
+        //                    ModelState.AddModelError("", error.Description);
+        //                }
+
+        //                return View(model);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("", "Email not found!");
+        //            return View(model);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError("", "Something went wrong. try again.");
+        //        return View(model);
+        //    }
+        //}
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        public IActionResult Update()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> Update(UpdateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByNameAsync(model.Email);
+                // Buscar el usuario existente por UserName o Email
+                var user = await userManager.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Usuario no encontrado.");
+                    return RedirectToAction("Index", "User");
+
+                }
+
+                // Actualizar las propiedades necesarias
+                user.FullName = model.FullName;
+                user.Email = model.Email;
+                user.UserName = model.UserName;
+
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return RedirectToAction("Edit", "User", model);
+                }
+            }
+            return RedirectToAction("Index", "User");
+
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Security()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Security(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userName = User?.Identity?.Name;
+                var user = await userManager.FindByNameAsync(userName);
+                
                 if (user != null)
                 {
                     var result = await userManager.RemovePasswordAsync(user);
                     if (result.Succeeded)
                     {
                         result = await userManager.AddPasswordAsync(user, model.NewPassword);
-                        return RedirectToAction("Login", "Account");
+                        TempData["SuccessMessage"] = "Password changed successfully";
+                        return View(model);
+
                     }
                     else
                     {
@@ -134,7 +239,7 @@ namespace medicamento.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Email not found!");
+                    ModelState.AddModelError("", "User not found!");
                     return View(model);
                 }
             }
@@ -143,12 +248,6 @@ namespace medicamento.Controllers
                 ModelState.AddModelError("", "Something went wrong. try again.");
                 return View(model);
             }
-        }
-
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
         }
 
     }

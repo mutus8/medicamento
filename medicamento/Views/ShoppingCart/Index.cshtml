@@ -1,92 +1,186 @@
 ﻿@model medicamento.ViewModels.ShoppingCart.ShoppingCartViewModel
 @{
-	ViewBag.Title = "Shopping Cart";
-	var tax = Decimal.Multiply(Model.CartTotal, 0.21m);
-	var total = Model.CartTotal + tax;
+    ViewBag.Title = "Shopping Cart";
+    var tax = Decimal.Multiply(Model.CartTotal, 0.21m);
+    var total = Model.CartTotal + tax;
 }
 
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-	<h1 class="h3 mb-0 text-gray-800">Shopping Cart</h1>
-</div>
-<div class="row">
-	<div class="col-lg-8">
-		<!-- Cart Items -->
-		<div class="card mb-4">
-			<div class="card-body">
-				@foreach (var item in Model.CartItems)
-				{
-					<div id="row-@item.RecordId">
-						<div class="row cart-item mb-3">
-							<div class="col-md-3">
-								<img src="~/img/undraw_medicine_hqqg.svg" alt="Product 1" class="img-fluid rounded">
-							</div>
-							<div class="col-md-5">
-								<h5 class="card-title">@item.Medicine.des_comercial</h5>
-								<p class="text-muted">@item.Medicine.cod_nacional</p>
-							</div>
-							<div class="col-md-2">
-								<div class="input-group">
-									<button class="btn btn-outline-secondary btn-sm" type="button">-</button>
-									<input style="max-width:100px" type="text" class="form-control form-control-sm quantity-input text-center" value="@item.Count">
-									<button class="btn btn-outline-secondary btn-sm" type="button">+</button>
-								</div>
-							</div>
-							<div class="col-md-2 text-right">
-								<p class="fw-bold">
-									<strong>
-										@item.Medicine.precio €
-									</strong>
-								</p>
-								@* <a asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-id="@item.Medicine.nro_registro" class="btn btn-danger"> *@
-								<a class="btn btn-danger RemoveLink" data-id="@item.RecordId">
-									<i class="fa fa-trash"></i>
-								</a>
-							</div>
-						</div>
-						<hr>
-					</div>
-				}
-			</div>
-		</div>
-		<!-- Continue Shopping Button -->
-		<div class="mb-4 text-start">
-			<a href="#" class="btn btn-outline-primary">
-				<i class="fa fa-arrow-left mx-2"></i>Continue Shopping
-			</a>
-		</div>
-	</div>
-	<div class="col-lg-4">
-		<!-- Cart Summary -->
-		<div class="card cart-summary">
-			<div class="card-body">
-				<h5 class="card-title mb-4">Order Summary</h5>
-				<div class="d-flex justify-content-between mb-3">
-					<span>Subtotal</span>
-					<span>@Model.CartTotal €</span>
-				</div>
+<div class="container-xl mt-4 px-4">
+    <div class="card invoice">
+        <div class="card-header p-md-5 border-bottom-0 bg-gradient-default text-white-50 p-4">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-12 col-lg-auto mb-lg-0 text-lg-start mb-5 text-center">
+                    @* <img class="invoice-brand-img rounded-circle mb-4" src="assets/img/demo/demo-logo.svg" alt="" /> *@
+                    <div class="h2 mb-0 text-white">Cart Summary</div>
+                    
+                </div>
+                <div class="col-12 col-lg-auto text-lg-end text-center">
+                    <div class="h3 text-white">Invoice</div>
+                    #29301
+                    <br />
+                    @((DateTime.UtcNow.ToString("d 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))))
 
-				<div class="d-flex justify-content-between mb-3">
-					<span>Tax</span>
-					<span>@tax €</span>
-				</div>
-				<hr>
-				<div class="d-flex justify-content-between mb-4">
-					<strong>Total</strong>
-					<strong id="cart-total">@total €</strong>
-				</div>
-				<a asp-controller="Checkout" asp-action="AddressAndPayment" class="btn btn-primary w-100">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-md-5 p-4">
+            @Html.AntiForgeryToken()
 
-			</div>
-		</div>
-		<!-- Promo Code -->
-		<div class="card mt-4">
-			<div class="card-body">
-				<h5 class="card-title mb-3">Apply Promo Code</h5>
-				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="Enter promo code">
-					<button class="btn btn-outline-secondary" type="button">Apply</button>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="table-responsive">
+                <table class="table-borderless mb-0 table">
+                    <thead class="border-bottom">
+                        <tr class="small text-uppercase text-muted">
+                            <th scope="col">Description</th>
+                            <th class="text-end" scope="col">Rate</th>
+                            <th class="text-end" scope="col">Amount</th>
+                            <th class="text-end" scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <tr class="border-bottom">
+                                <td>
+                                    <div class="fw-bold">@item.Medicine.des_comercial</div>
+                                    <div class="small text-muted d-none d-md-block">@item.Medicine.cod_nacional</div>
+                                    <div class="d-flex align-items-center w-25">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm btn-qty" data-id="@item.RecordId" data-action="decrease">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="text" readonly class="form-control-plaintext text-center" id="qty-@item.RecordId" id="qty-@item.RecordId"
+                                               value="@item.Count"
+                                               data-id="@item.RecordId" />
+                                        <button type="button" class="btn btn-outline-secondary btn-sm btn-qty" data-id="@item.RecordId" data-action="increase">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+
+                                <td class="fw-bold text-end">@(item.Medicine.precio.ToString("0.00")) €</td>
+                                <td class="fw-bold text-end">@((item.Count * item.Medicine.precio).ToString("0.00")) €</td>
+                                <td class="fw-bold text-end">
+                                    <button type="button" class="btn btn-pink btn-remove-item btn-sm" data-id="@item.RecordId" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+
+                                    </button>
+                                </td>
+
+                            </tr>
+                        }
+                        <tr>
+                            <td class="pb-0 text-end" colspan="3"><div class="text-uppercase small fw-700 text-muted">Subtotal:</div></td>
+                            <td class="pb-0 text-end"><div class="h5 fw-700 mb-0">@Model.CartTotal €</div></td>
+                        </tr>
+                        <tr>
+                            <td class="pb-0 text-end" colspan="3"><div class="text-uppercase small fw-700 text-muted">Tax (21%):</div></td>
+                            <td class="pb-0 text-end"><div class="h5 fw-700 mb-0">@((Model.CartTotal * 0.21m).ToString("0.00")) €</div></td>
+                        </tr>
+                        <tr>
+                            <td class="pb-0 text-end" colspan="3"><div class="text-uppercase small fw-700 text-muted">Total Amount Due:</div></td>
+                            <td class="pb-0 text-end"><div class="h5 fw-700 text-green mb-0">@((Model.CartTotal + (Model.CartTotal * 0.21m)).ToString("0.00")) €</div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a asp-controller="Checkout" asp-action="AddressAndPayment" class="btn btn-secondary">Proceed to Checkout</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @* <div class="card-footer p-lg-5 border-top-0 p-4">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-lg-0 mb-4">
+                    <div class="small text-muted text-uppercase fw-700 mb-2">To</div>
+                    <div class="h6 mb-1">Company Name</div>
+                    <div class="small">1234 Company Dr.</div>
+                    <div class="small">Yorktown, MA 39201</div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-lg-0 mb-4">
+                    <div class="small text-muted text-uppercase fw-700 mb-2">From</div>
+                    <div class="h6 mb-0">Start Bootstrap</div>
+                    <div class="small">5678 Company Rd.</div>
+                    <div class="small">Yorktown, MA 39201</div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="small text-muted text-uppercase fw-700 mb-2">Note</div>
+                    <div class="small mb-0">Payment is due 15 days after receipt of this invoice. Please make checks or money orders out to Company Name, and include the invoice number in the memo. We appreciate your business, and hope to be working with you again very soon!</div>
+                </div>
+            </div>
+        </div> *@
+    </div>
 </div>
+
+<script>
+    // Manejar los botones + y -
+    document.querySelectorAll('.btn-qty').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var input = document.getElementById('qty-' + id);
+            var value = parseInt(input.value, 10);
+            if (btn.getAttribute('data-action') === 'increase') {
+                input.value = value + 1;
+            } else if (btn.getAttribute('data-action') === 'decrease' && value > 1) {
+                input.value = value - 1;
+            }
+            // Llama a la función para actualizar en el servidor
+            updateQuantity(id, input.value);
+        });
+    });
+
+    // Manejar cambios manuales en el input
+    document.querySelectorAll('.cart-qty-input').forEach(function (input) {
+        input.addEventListener('change', function () {
+            var id = input.getAttribute('data-id');
+            var value = parseInt(input.value, 10);
+            if (value < 1) {
+                input.value = 1;
+                value = 1;
+            }
+            updateQuantity(id, value);
+        });
+    });
+
+    // Función para enviar la cantidad al servidor
+    function updateQuantity(recordId, quantity) {
+        fetch('/ShoppingCart/UpdateQuantity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify({ Id: recordId, Quantity: quantity })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Aquí puedes actualizar totales, etc.
+            location.reload(); // O actualiza solo los totales si prefieres
+        });
+    }
+
+    // Botón para eliminar un elemento del carrito
+    document.querySelectorAll('.btn-remove-item').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            // if (!confirm('¿Seguro que deseas eliminar este producto del carrito?')) return;
+            var id = btn.getAttribute('data-id');
+            fetch('/ShoppingCart/RemoveFromCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({ id: parseInt(id) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Opcional: elimina la fila del producto
+                    var row = document.querySelector('[data-id="' + id + '"]').closest('tr');
+                    if (row) row.remove();
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>

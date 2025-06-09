@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -29,6 +28,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -40,6 +40,12 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromSeconds(10);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
 
 var app = builder.Build();

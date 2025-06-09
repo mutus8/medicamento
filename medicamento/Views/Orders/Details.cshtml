@@ -1,154 +1,115 @@
 ﻿@model medicamento.Models.ShoppingCart.OrderModel
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Order Details";
 }
 
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Order Details</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-    </a>
+<header class="page-header page-header-compact page-header-light border-bottom mb-4 bg-white">
+	<div class="container-xl px-4">
+		<div class="page-header-content">
+			<div class="row align-items-center justify-content-between pt-3">
+				<div class="col-auto mb-3">
+					<h1 class="page-header-title">
+						<div class="page-header-icon"><i data-feather="eye"></i></div>
+						Edit Order
+					</h1>
+				</div>
+				<div class="col-12 col-xl-auto mb-3">
+					<a class="btn btn-sm btn-light text-primary" asp-action="Index">
+						<i class="me-1" data-feather="arrow-left"></i>
+						Back to Order List
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="container-xl mt-4 px-4">
+    <div class="step step-secondary mb-5">
+        <div class="step-item">
+            <a class="step-item-link" href="#!">Order Placed</a>
+        </div>
+        <div class="step-item">
+            <a class="step-item-link" href="#!">Packed</a>
+        </div>
+        <div class="step-item active">
+            <a class="step-item-link" href="#!">Shipped</a>
+        </div>
+        <div class="step-item">
+            <a class="step-item-link disabled" href="#!" tabindex="-1" aria-disabled="true">Delivered</a>
+        </div>
+    </div>
+	<div class="row">
+		<div class="col-xl-8">
+			<div class="card mb-4">
+                <div class="card-header bg-secondary text-white">Item From Order #@Model.OrderId</div>
+				<div class="card-body">
+					<table class="table-striped table" id="dataTable">
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th>Quantity</th>
+								<th>Price</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							@foreach (var item in Model.OrderDetails.ToList())
+							{
+								<tr>
+									<td>
+										@Html.DisplayFor(modelItem => item.Medicine.des_comercial)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Quantity)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.UnitPrice) €
+									</td>
+									<td>
+										@item.TotalPrice()
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-4">
+			<div class="card mb-xl-0 mb-4">
+				<div class="card-header bg-secondary text-white">Order Summary</div>
+				<div class="card-body">
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Description</th>
+								<th scope="col">Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>SubTotal</td>
+								<td>@(Model.OrderDetails.Sum(x => x.UnitPrice)) €</td>
+							</tr>
+							<tr>
+								<td>Tax</td>
+								<td>@((Model.OrderDetails.Sum(x => x.UnitPrice) * 0.21m).ToString("0.00")) €</td>
+							</tr>
+							<tr class="fw-bold">
+								<td>Total</td>
+								<td>@(Model.OrderDetails.Sum(x => x.UnitPrice) + (Model.OrderDetails.Sum(x => x.UnitPrice) * 0.21m).ToString("0.00")) €</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
 </div>
-
-<div class="row justify-content-center">
-    <div class="col-lg-7 col-md-10 col-sm-11">
-
-        <div class="horizontal-steps mb-4 mt-4 pb-5">
-            <div class="horizontal-steps-content">
-                <div class="step-item">
-                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="20/08/2018 07:24 PM">Order Placed</span>
-                </div>
-                <div class="step-item current">
-                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="21/08/2018 11:32 AM">Packed</span>
-                </div>
-                <div class="step-item">
-                    <span>Shipped</span>
-                </div>
-                <div class="step-item">
-                    <span>Delivered</span>
-                </div>
-            </div>
-
-            <div class="process-line" style="width: 33%;"></div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card mb-4 shadow">
-            <div class="card-header py-3">
-                <h6 class="font-weight-bold text-primary m-0">ITEM FROM ORDER #@Model.OrderId</h6>
-            </div>
-            <div class="card-body">
-                @* <div class="table-responsive"> *@
-                <table class="table-striped table" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var item in Model.OrderDetails.ToList())
-                        {
-
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Medicine.des_comercial)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UnitPrice) €
-                                </td>
-                                <td>
-                                    @item.TotalPrice()
-                                    @* @Html.DisplayFor(modelItem => item.TotalPrice()) € *@
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-
-
-
-
-                @* </div> *@
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card mb-4 shadow">
-                <div class="card-header py-3">
-                    <h6 class="font-weight-bold text-primary m-0">ORDER SUMMARY</h6>
-                </div>
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card mb-4 shadow">
-                <div class="card-header py-3">
-                    <h6 class="font-weight-bold text-primary m-0">SHIPPING INFORMATION</h6>
-                </div>
-                <div class="card-body">
-                    <address class="font-14 address-lg mb-0">
-                        795 Folsom Ave, Suite 600<br>
-                        San Francisco, CA 94107<br>
-                        <abbr title="Phone">P:</abbr> (123) 456-7890 <br>
-                        <abbr title="Mobile">M:</abbr> (+01) 12345 67890
-                    </address>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card mb-4 shadow">
-                <div class="card-header py-3">
-                    <h6 class="font-weight-bold text-primary m-0">BILLING INFORMATION</h6>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li>
-                            <p class="mb-2">
-                                <span class="fw-bold me-2">Payment Type:</span>
-                                Credit Card
-                            </p>
-                            <p class="mb-2">
-                                <span class="fw-bold me-2">Provider:</span> Visa
-                                ending in 2851
-                            </p>
-                            <p class="mb-2">
-                                <span class="fw-bold me-2">Valid Date:</span>
-                                02/2020
-                            </p>
-                            <p class="mb-0"><span class="fw-bold me-2">CVV:</span> xxx</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card mb-4 shadow">
-                <div class="card-header py-3">
-                    <h6 class="font-weight-bold text-primary m-0">BILLING INFORMATION</h6>
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        <i class="fas fa-truck"></i>
-                        <h5><b>UPS Delivery</b></h5>
-                        <p class="mb-1"><b>Order ID :</b> xxxx235</p>
-                        <p class="mb-0"><b>Payment Mode :</b> COD</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>

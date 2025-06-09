@@ -3,6 +3,7 @@ using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using medicamento.Services.ShoppingCart;
 using medicamento.ViewModels.ShoppingCart;
+using medicamento.Models.ShoppingCart;
 
 namespace medicamento.Controllers
 {
@@ -42,29 +43,26 @@ namespace medicamento.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public ActionResult RemoveFromCart(int id)
-        {
-            var cart = ShoppingCart.GetCart(this.HttpContext);
+        //[HttpPost]
+        //public ActionResult RemoveFromCart(int id)
+        //{
+        //    var cart = ShoppingCart.GetCart(this.HttpContext);
 
-            string medicineName = _context.Carts.Single(item => item.RecordId == id).Medicine.des_comercial;
+        //    string medicineName = _context.Carts.Single(item => item.RecordId == id).Medicine.des_comercial;
 
-            int itemCount = cart.RemoveFromCart(id);
+        //    int itemCount = cart.RemoveFromCart(id);
 
-            var results = new ShoppingCartRemoveViewModel
-            {
-                Message = HttpUtility.HtmlEncode(medicineName) +
-                    " has been removed from your shopping cart.",
-                CartTotal = cart.GetTotal(),
-                CartCount = cart.GetCount(),
-                ItemCount = itemCount,
-                //CartTotal = 0,
-                //CartCount = 0,
-                //ItemCount = 0,
-                DeleteId = id
-            };
-            return Json(results);
-        }
+        //    var results = new ShoppingCartRemoveViewModel
+        //    {
+        //        Message = HttpUtility.HtmlEncode(medicineName) +
+        //            " has been removed from your shopping cart.",
+        //        CartTotal = cart.GetTotal(),
+        //        CartCount = cart.GetCount(),
+        //        ItemCount = itemCount,
+        //        DeleteId = id
+        //    };
+        //    return Json(results);
+        //}
 
         [System.Web.Mvc.ChildActionOnly]
         public ActionResult CartSummary()
@@ -74,5 +72,28 @@ namespace medicamento.Controllers
             ViewData["CartCount"] = cart.GetCount();
             return PartialView("~/Views/Shared/_CartSummaryPartial");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateQuantity([FromBody] UpdateCartQuantityModel model)
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+            cart.UpdateQuantity(model.Id, model.Quantity);
+            
+            return Json(new { success = true });
+        }
+        
+        [HttpPost]
+        public IActionResult RemoveFromCart([FromBody] RemoveFromCartModel request)
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+            var cartItem = _context.Carts.FirstOrDefault(item => item.RecordId == request.Id);
+            string medicineName = cartItem?.Medicine?.des_comercial ?? "El producto";
+            bool result = cart.RemoveFromCart(request.Id);
+
+            return Json(new { success = result, message = $"{medicineName} ha sido eliminado del carrito." });
+        }
+
     }
 }

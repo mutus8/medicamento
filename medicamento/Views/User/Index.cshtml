@@ -1,0 +1,97 @@
+﻿@using medicamento.Models.Account
+@* @model List<Users>; *@
+@model List<(Users User, IList<string> Roles)>
+
+@{
+	ViewData["Title"] = "User management";
+}
+
+<header class="page-header page-header-compact page-header-light border-bottom mb-4 bg-white">
+	<div class="container-fluid px-4">
+		<div class="page-header-content">
+			<div class="row align-items-center justify-content-between pt-3">
+				<div class="col-auto mb-3">
+					<h1 class="page-header-title">
+						<div class="page-header-icon"><i data-feather="user"></i></div>
+						Users List
+					</h1>
+				</div>
+				<div class="col-12 col-xl-auto mb-3">
+					<a class="btn btn-sm btn-light text-primary" asp-action="Index">
+						<i class="me-1" data-feather="users"></i>
+						Manage Groups
+					</a>
+					<a class="btn btn-sm btn-light text-primary" asp-action="Create">
+						<i class="me-1" data-feather="user-plus"></i>
+						Add New User
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- Main page content-->
+<div class="container-fluid px-4">
+	<partial name="_ErrorAlert" />
+	<div class="card">
+		<div class="card-body">
+			<table id="dataTable">
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>Email</th>
+						<th>Role</th>
+						<th>Groups</th>
+						<th>Joined Date</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>User</th>
+						<th>Email</th>
+						<th>Role</th>
+						<th>Groups</th>
+						<th>Joined Date</th>
+						<th>Actions</th>
+					</tr>
+				</tfoot>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								<div class="d-flex align-items-center">
+									<div class="avatar me-2"><img class="avatar-img img-fluid" src="~/assets/img/pic-profile.svg" /></div>
+									@Html.DisplayFor(modelItem => item.User.Id)
+								</div>
+							</td>
+							<td>@Html.DisplayFor(modelItem => item.User.Email)</td>
+							<td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
+							<td>
+								@foreach (var role in @item.Roles)
+								{
+									@if(role == "Admin")
+									{
+										<span class="badge bg-purple-soft text-purple">@role</span>
+									}
+									@if (role == "User")
+									{
+										<span class="badge bg-green-soft text-green">@role</span>
+									}
+									
+								}
+								
+							</td>
+							<td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
+							<td>
+								<a class="btn btn-datatable btn-icon btn-transparent-dark me-2" asp-action="Edit" asp-route-id="@item.User.Id"><i data-feather="edit"></i></a>
+								<a class="btn btn-datatable btn-icon btn-transparent-dark" asp-action="Delete" asp-route-id="@item.User.Id"><i data-feather="trash-2"></i></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

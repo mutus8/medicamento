@@ -63,28 +63,19 @@ namespace medicamento.Services.ShoppingCart
            
             _context.SaveChanges();
         }
-        public int RemoveFromCart(int id)
+        public bool RemoveFromCart(int id)
         {
             var cartItem = _context.Carts.Single(
                 cart => cart.CartId == ShoppingCartId
                 && cart.RecordId == id);
-
-            int itemCount = 0;
+            bool result = false;
 
             if (cartItem != null)
             {
-                if (cartItem.Count > 1)
-                {
-                    cartItem.Count--;
-                    itemCount = cartItem.Count;
-                }
-                else
-                {
-                    _context.Carts.Remove(cartItem);
-                }
-                _context.SaveChanges();
+                var cart = _context.Carts.Remove(cartItem);
+                result = _context.SaveChanges() > 0;
             }
-            return itemCount;
+            return result;
         }
         public void EmptyCart()
         {
@@ -159,6 +150,7 @@ namespace medicamento.Services.ShoppingCart
             
             return order.OrderId;
         }
+        
         public string GetCartId(HttpContext context)
         {
             if (context.Session.GetString(CartSessionKey) == null)
@@ -186,6 +178,25 @@ namespace medicamento.Services.ShoppingCart
                 item.CartId = userName;
             }
             _context.SaveChanges();
+        }
+
+        public void UpdateQuantity(int recordId, int quantity)
+        {
+            var cartItem = _context.Carts.SingleOrDefault(
+                c => c.CartId == ShoppingCartId && c.RecordId == recordId);
+
+            if (cartItem != null)
+            {
+                if (quantity > 0)
+                {
+                    cartItem.Count = quantity;
+                }
+                else
+                {
+                    _context.Carts.Remove(cartItem);
+                }
+                _context.SaveChanges();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using medicamento.Models.ShoppingCart;
 using medicamento.Services.DB;
+using medicamento.ViewModels.Account;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,37 +74,48 @@ namespace medicamento.Controllers
             return View(order);
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Address,Email")] OrderModel order)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Address,Email")] OrderModel model)
         {
-            if (id != order.OrderId)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                // Si la validación falla, vuelve a la vista con los errores
+                return View(model);
             }
 
-            if (ModelState.IsValid)
+            var order = await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
+            if (order == null)
             {
-                try
-                {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.OrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                // Si no se encuentra la orden, muestra error
+                ModelState.AddModelError("", "Order not found.");
+                return View(model);
+            }
+
+            // Actualiza solo los campos editables
+            order.FirstName = model.FirstName;
+            order.LastName = model.LastName;
+            order.Address = model.Address;
+            order.Email = model.Email;
+
+            try
+            {
+                _context.Update(order);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Orders.Any(e => e.OrderId == id))
+                {
+                    ModelState.AddModelError("", "Order not fount.");
+                    return View(model);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
