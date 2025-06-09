@@ -1,92 +1,74 @@
-﻿
-<div id="layoutSidenav_nav">
-	<nav class="sidenav accordion sidenav-dark d-flex" id="sidenavAccordion">
+﻿<div id="layoutSidenav_nav">
+	<nav class="sidenav shadow-right sidenav-light">
 		<div class="sidenav-menu">
-			<div class="nav">
+			<div class="nav accordion" id="accordionSidenav">
+				<!-- Sidenav Menu Heading (Account)-->
+				<!-- * * Note: * * Visible only on and above the sm breakpoint-->
+				<div class="sidenav-menu-heading d-sm-none">Account</div>
+				<!-- Sidenav Link (Alerts)-->
+				<!-- * * Note: * * Visible only on and above the sm breakpoint-->
+				<a class="nav-link d-sm-none" href="#!">
+					<div class="nav-link-icon"><i data-feather="bell"></i></div>
+					Alerts
+					<span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
+				</a>
+				<!-- Sidenav Link (Messages)-->
+				<!-- * * Note: * * Visible only on and above the sm breakpoint-->
+				<a class="nav-link d-sm-none" asp-controller="ShoppingCart" asp-action="Index">
+					<div class="nav-link-icon"><i data-feather="mail"></i></div>
+					Messages
+					<span class="badge bg-success-soft text-success ms-auto">2 New!</span>
+				</a>
+				@* <div class="sidenav-menu-heading">Core</div>
+				<a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+				   data-bs-target="#collapseDashboards" aria-expanded="false"
+				   aria-controls="collapseDashboards">
+					<div class="nav-link-icon"><i data-feather="activity"></i></div>
+					Order Management
+					<div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+				</a>
+				<div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+					<nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+						<a class="nav-link" asp-controller="Order" asp-action="Index">
+							Default
+							<span class="badge bg-primary-soft text-primary ms-auto">Updated</span>
+						</a>
+						<a class="nav-link" href="dashboard-2.html">Search Users</a>
+						<a class="nav-link" href="dashboard-3.html">Affiliate</a>
+						<a class="nav-link" href="#" data-bs-theme-value="dark">Dark Mode</a>
+						<a class="nav-link" href="#" data-bs-theme-value="light">Light Mode</a>
+					</nav>
+				</div> *@
+
 				<a class="nav-link" asp-controller="Home" asp-action="Index">
-					<div class="nav-link-icon">
-						<i class="bi bi-speedometer"></i>
-						</div>
-					Dashboard
+					<div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
+					Home
 				</a>
 				<a class="nav-link" asp-controller="Medicine" asp-action="Index">
-					<div class="nav-link-icon">
-						<i class="bi bi-prescription2"></i>
-					</div>
+					<div class="nav-link-icon"><i data-feather="filter"></i></div>
 					Medicine
 				</a>
-				
-				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-				   data-bs-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
-					<div class="nav-link-icon"><i class="bi bi-columns"></i></div>
-					Order
-					<div class="sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
+
+				<a class="nav-link" asp-controller="Orders" asp-action="Index">
+					<div class="nav-link-icon"><i data-feather="filter"></i></div>
+					Orders
 				</a>
-
-				<div class="collapse" id="collapseOrder" aria-labelledby="headingOne"
-					 data-bs-parent="#sidenavAccordion">
-					<nav class="sidenav-menu-nested nav">
-						<a class="nav-link" asp-controller="Orders" asp-action="Index">Order List</a>
-						<a class="nav-link" href="#" >Order Details</a>
-					</nav>
-				</div>
-
-				<a class="nav-link" asp-controller="ShoppingCart" asp-action="Index">
-					<div class="nav-link-icon">
-						<i class="bi bi-cart3"></i>
-						</div>
-					Shopping Cart
-				</a>
-
-				<div class="sidenav-menu-heading">Management</div>
-				
-				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-				   data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
-					<div class="nav-link-icon"><i class="bi bi-person-gear"></i></div>
-					User
-					<div class="sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
-				</a>
-
-				<div class="collapse" id="collapseUser" aria-labelledby="headingFour"
-					 data-bs-parent="#sidenavAccordion">
-					<nav class="sidenav-menu-nested nav">
-						<a class="nav-link" href="#">Create User</a>
-						<a class="nav-link" href="#">User Management</a>
-					</nav>
-				</div>
-				
-				<a class="nav-link" href="tables.html">
-					<div class="nav-link-icon"><i class="bi bi-bar-chart"></i></div>
-					Statics
-				</a>
-
-				
-				
-				<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-				   data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-					<div class="nav-link-icon"><i class="bi bi-grid"></i></div>
-					Layout
-					<div class="sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
-				</a>
-
-				<div class="collapse" id="collapseLayouts" aria-labelledby="headingThree"
-					 data-bs-parent="#sidenavAccordion">
-					<nav class="sidenav-menu-nested nav">
-						<a class="nav-link" href="#" data-bs-theme-value="auto">Default</a>
-						<a class="nav-link" href="#" data-bs-theme-value="light">Light Mode</a>
-						<a class="nav-link" href="#" data-bs-theme-value="dark">Dark Mode</a>
-
-					</nav>
-				</div>
-
-
-
+				@if (User.IsInRole("Admin"))
+				{
+					<a class="nav-link" asp-controller="User" asp-action="Index">
+						<div class="nav-link-icon"><i data-feather="filter"></i></div>
+						User Magement
+					</a>
+				}
 
 			</div>
 		</div>
-		<div class="sidenav-footer">
-			<div class="small">Logged in as:</div>
-			Start Bootstrap
-		</div>
+		<!-- Sidenav Footer-->
+		@* <div class="sidenav-footer">
+			<div class="sidenav-footer-content">
+				<div class="sidenav-footer-subtitle">Logged in as:</div>
+				<div class="sidenav-footer-title">Valerie Luna</div>
+			</div>
+		</div> *@
 	</nav>
 </div>

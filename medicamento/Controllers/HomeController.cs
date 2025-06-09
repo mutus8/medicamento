@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using medicamento.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +23,14 @@ namespace medicamento.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("/StatusCodeError/{statusCode}")]
+        public IActionResult Error(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (statusCode == 404)
+            {
+                return View("PageNotFound");
+            }
+            return View();
         }
     }
 }

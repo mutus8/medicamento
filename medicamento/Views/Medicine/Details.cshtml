@@ -1,52 +1,78 @@
 ﻿@model medicamento.Models.Medicine.PrescripcionModel
-
-<div class="card mb-4 shadow">
-	<div class="card-header py-3">
-		<h6 class="font-weight-bold text-primary m-0">@Model.des_comercial</h6>
-	</div>
-	<div class="card-body">
-		<div class="row">
-			<div class="col-md-4">
-				<img src="@Url.Content(Model?.img_envase)" alt="Image" class="img-fluid" />
-				<p class="card-text"><small class="text-muted">@Model?.fecha_comercializado.ToString("dd/MM/yyyy")</small></p>
-			</div>
-			<div class="col-md-8">
-				<h5 class="card-title">@Model?.des_presentacion</h5>
-				<p class="card-text">@Model?.laboratorio</p>
-				<p class="card-text">Active Ingredients: @Model?.principios_activos</p>
-
-				<ul>
-					@foreach (var pa in @Model?.principios_activos.Split('#'))
-					{
-						<li>@pa</li>
-					}
-				</ul>
-
-				<p class="card-text">Excipients: @Model?.excipientes</p>
-				<ul>
-					@foreach (var ex in @Model?.excipientes.Split('#'))
-					{
-						<li>@ex</li>
-					}
-				</ul>
-
-
-				<p class="card-text">Recipe: @Model?.receta</p>
-				<p class="card-text">Commercialized: @Model?.comercializado</p>
-				<a href="@Url.Content(Model?.url_ficha)" class="btn btn-primary">Ficha Técnica</a>
-				<a href="@Url.Content(Model?.url_prospecto)" class="btn btn-secondary">Prospecto</a>
+@{
+	ViewData["Title"] = "Medicine Details";
+}
+<header class="page-header page-header-compact page-header-light border-bottom mb-4 bg-white">
+	<div class="container-xl px-4">
+		<div class="page-header-content">
+			<div class="row align-items-center justify-content-between pt-3">
+				<div class="col-auto mb-3">
+					<h1 class="page-header-title">
+						<div class="page-header-icon"><i data-feather="file"></i></div>
+						Medicine Detail
+					</h1>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div>
+</header>
+<div class="container-xl mt-4 px-4">
+	<div class="card card-header-actions mx-auto">
+		<div class="card-header bg-secondary text-white">
+			@Model.des_comercial
+			
+		</div>
+		<div class="row no-gutters">
+			@if (!string.IsNullOrEmpty(Model.img_envase))
+			{
+				<div class="col-md-4"><img class="img-fluid" src="@Url.Content(Model?.img_envase)" alt="..."></div>
+			} else
+			{
+				<div class="col-md-4"><img class="img-fluid" src="~/assets/img/medicine.svg" alt="..."></div>
+			}
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">@Model?.des_presentacion</h5>
+					<p class="card-text">@Model?.laboratorio</p>
+					<div class="d-flex justify-content-sm-end">
+						<a href="@Url.Content(Model?.url_ficha)" class="btn btn-teal btn-icon me-2">
+							<i data-feather="bookmark"></i>
+						</a>
+						<a href="@Url.Content(Model?.url_prospecto)" class="btn btn-pink btn-icon me-2">
+							<i data-feather="share"></i>
+						</a>
+					</div>
+					@if (!string.IsNullOrEmpty(Model?.principios_activos))
+					{
+						<p class="card-text">Active Ingredients:</p>
+						<ul>
+							@foreach (var pa in @Model?.principios_activos.Split('#'))
+							{
+								<li>@pa</li>
+							}
+						</ul>
+					}
 
-	<a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model?.cod_nacional" class="btn btn-success btn-icon-split">
-		<span class="icon text-white-50">
-			<i class="fas fa-shopping-cart"></i>
-		</span>
-		<span class="text">Add to cart</span>
-	</a>
-	@*     <a asp-action="Edit" asp-route-id="@Model?.cod_nacional">Edit</a> |
-    <a asp-action="Index">Back to List</a> *@
+					@if (!string.IsNullOrEmpty(Model?.excipientes))
+					{
+						<p class="card-text">Excipients:</p>
+						<ul class="list-unstyled">
+							@foreach (var ex in @Model?.excipientes.Split('#'))
+							{
+								<li>@ex</li>
+							}
+						</ul>
+					}
+
+					<p class="card-text">Recipe: @Model?.receta</p>
+					<p class="card-text">Commercialized: @Model?.comercializado</p>
+
+					<a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model?.cod_nacional" class="btn btn-secondary">
+						<i class="fas fa-shopping-cart"></i> Add to cart
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>

@@ -2,7 +2,6 @@
 using medicamento.Services.DB;
 using medicamento.Services.ShoppingCart;
 using Microsoft.AspNetCore.Mvc;
-using Mysqlx.Crud;
 
 namespace medicamento.Controllers
 {
@@ -15,8 +14,6 @@ namespace medicamento.Controllers
             _logger = logger;
             _context = context;
         }
-
-        const string PromoCode = "FREE";
         
         public ActionResult AddressAndPayment()
         {

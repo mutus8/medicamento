@@ -1,43 +1,83 @@
-﻿<nav class="topnav navbar navbar-expand navbar-dark bg-dark">
-
-    <button class="btn btn-link btn-sm order-lg-0 me-lg-0 order-1 me-4" id="sidebarToggle" href="#!">
-        <i class="bi bi-list"></i>
+﻿<nav class="topnav navbar navbar-expand justify-content-between justify-content-sm-start navbar-light bg-white shadow" id="sidenavAccordion">
+    <!-- Sidenav Toggle Button-->
+    <button class="btn btn-icon btn-transparent-dark order-lg-0 ms-lg-2 me-lg-0 order-1 me-2" id="sidebarToggle">
+        <i data-feather="menu"></i>
     </button>
-    <a class="navbar-brand ps-3" href="index.html">Mutus</a>
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-lg-2 pe-3 ps-4" href="index.html">Mutus</a>
+    <!-- Navbar Search Input-->
+    <form class="form-inline d-none d-lg-block me-3 me-auto" asp-controller="Medicine" asp-action="List" method="get">
+        <div class="input-group input-group-joined input-group-solid">
+            @* <input class="form-control pe-0" type="search" placeholder="Search" aria-label="Search" /> *@
+            @Html.TextBox("Param", null, new { @class = "form-control pe-0", placeholder = "Search" })
 
-    <partial name="_Search" />
+            <div class="input-group-text"><i data-feather="search"></i></div>
+        </div>
+    </form>
+    <!-- Navbar Items-->
+    <ul class="navbar-nav align-items-center ms-auto">
 
-    <ul class="navbar-nav me-lg-4 me-3 ms-auto">
-
-        <li class="nav-item dropdown d-lg-none">
-            <a class="nav-link dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false">
-                <i class="bi bi-search"></i>
+        <!-- Navbar Search Dropdown-->
+        <li class="nav-item dropdown no-caret d-lg-none me-3">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button"
+               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i data-feather="search"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="searchDropdown" style="width: 200px;">
-                <partial name="_SearchDropdown" />
+            <!-- Dropdown - Search-->
+            <div class="dropdown-menu dropdown-menu-end animated--fade-in-up p-3 shadow"
+                 aria-labelledby="searchDropdown">
+                <form class="form-inline w-100 me-auto" asp-controller="Medicine" asp-action="List" method="get">
+                    <div class="input-group input-group-joined input-group-solid">
+@*                         <input class="form-control pe-0" type="text" placeholder="Search for..." aria-label="Search"
+                               aria-describedby="basic-addon2" /> *@
+						@Html.TextBox("Param", null, new { @class = "form-control pe-0", placeholder = "Search for..." })
+                        <div class="input-group-text"><i data-feather="search"></i></div>
+                    </div>
+                </form>
             </div>
         </li>
-
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+            <partial name="_CartSummary" />
+        </li>
+        <!-- User Dropdown-->
+        <li class="nav-item dropdown no-caret dropdown-user me-lg-4 me-3">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
+               href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false">
-                <i class="bi bi-person-circle"></i>
+                <img class="img-fluid" src="~/assets/img/developer-avatar.svg" />
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li>
-                    <a class="dropdown-item" href="#!">Settings</a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#!">Activity Log</a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider" />
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#!">Logout</a>
-                </li>
-            </ul>
+            <div class="dropdown-menu dropdown-menu-end animated--fade-in-up border-0 shadow"
+                 aria-labelledby="navbarDropdownUserImage">
+                <h6 class="dropdown-header d-flex align-items-center">
+                    <div class="dropdown-item-icon me-1"><i data-feather="user"></i></div>
+                    <div class="dropdown-user-details">
+                        <div class="dropdown-user-details-name">@User?.Identity?.Name</div>
+                    </div>
+                </h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-controller="Account" asp-action="Index">
+                    <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                    Account
+                </a>
+                <a class="dropdown-item" href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                    Logout
+                </a>
+            </div>
         </li>
     </ul>
 </nav>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
